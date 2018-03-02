@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipse-userlibraries>
+  <library name="hamcrest-core-1.3">
+    <archive path="/Users/javisanchez/Downloads/hamcrest-core-1.3.jar" />
+  </library>
+  <library name="junit-4.12">
+    <archive path="/Users/javisanchez/Downloads/junit-4.12.jar" />
+  </library>
+</eclipse-userlibraries>
+
