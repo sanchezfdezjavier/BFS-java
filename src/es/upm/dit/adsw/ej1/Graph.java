@@ -33,9 +33,9 @@ public class Graph {
 
     //comprobar si esta bien
     public Link getLink(Node src, Node dst) {
-        String nodeSrc = src.getName();
-        String nodeDst = dst.getName();
-        Link resultado = null;
+        String nodeSrc= src.getName();
+        String nodeDst= dst.getName();
+        Link resultado= null;
 
         for (int i = 0; i < edges.size(); i++) {
             if (nodeSrc.equals(edges.get(i).getSrc()) &&
