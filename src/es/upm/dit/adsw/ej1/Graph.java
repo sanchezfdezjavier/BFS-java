@@ -9,78 +9,66 @@ import java.util.*;
 
 public class Graph {
 
-    private LinkedList<Link> edges = new LinkedList<Link>();
-    private LinkedList<Node> nodes = new LinkedList<Node>();
+    
+    private Map<String, Node> nodeMap;
+    private Map<Node, List<Link>> linkMap;
 
-    public Graph() {
 
 
+    public Graph(){
+        this.linkMap= new HashMap<>();
+        this.nodeMap= new HashMap<>();
     }
 
-    public void addLink(Link link) {
-        this.edges.add(link);
+    public void addNode(Node node){
+        this.nodeMap.put(node.getName(), node);
     }
 
-    public void addNode(Node node) {
-        this.nodes.add(node);
+    public void addLink(Link link){
+        Node src= this.nodeMap.get(link.getSrc());
+        if(src!= null ){
+            List<Link> linkList= this.linkMap.get(src);
+            if(linkList.equals(null)){
+                linkList= new ArrayList<>();
+                this.linkMap.put(src, linkList);
+            }
+            linkList.add(link);
+        }
     }
 
-    public void addLink2D(String a, String b, int w) throws Exception {
-        this.edges.add(new Link(a, b, w));
-        this.edges.add(new Link(b, a, w));
+    public void addLink2D(String name1, String name2, int num){
+        Link link1= new Link(name1, name2, num);
+        Link link2= new Link(name2, name1, num);
 
+        this.addLink(link1);
+        this.addLink(link2);
     }
 
-    //comprobar si esta bien
+    public Node getNode(String nodeName){
+        return this.nodeMap.get(nodeName);
+    }
+
+    public List<Node> getNodes(){
+        return new ArrayList<>(this.nodeMap.values());
+    }
+
+    public List<Link> getLinks(){
+        List<Link> links= new ArrayList<>();
+        for (List<Link> linkList: this.linkMap.values()){
+            for(Link link: linkList){
+                if(!links.contains(link)){
+                    links.add(link);
+                }
+            }
+        }
+        return links;
+    }
+
     public Link getLink(Node src, Node dst) {
-        String nodeSrc= src.getName();
-        String nodeDst= dst.getName();
-        Link resultado= null;
-
-        for (int i = 0; i < edges.size(); i++) {
-            if (nodeSrc.equals(edges.get(i).getSrc()) &&
-                    nodeDst.equals(edges.get(i).getDst())) {
-                resultado = this.edges.get(i);
-            }
-        }
-        return resultado;
-
+        //este cambia, entonces, lo dejo vacio porque no se usa.
+        return null;
     }
 
-    public LinkedList<Link> getLinks() {
-        return this.edges;
-    }
-
-    public LinkedList<Link> getLinks(Node node) {
-        String nodeName = node.getName();
-        LinkedList<Link> resultado=new LinkedList<>();
-
-        for (int i = 0; i < this.edges.size(); i++) {
-            String srcName = this.edges.get(i).getSrc();
-            if (srcName.equals(nodeName)) {
-                resultado.add(this.edges.get(i));
-            }
-        }
-        return resultado;
-    }
-
-    public Node getNode(String name) {
-        String nodeName;
-        Node resultado = null;
-        for (int i = 0; i < this.nodes.size(); i++) {
-            nodeName = this.nodes.get(i).getName();
-            if (nodeName.equals(name)) {
-                resultado= this.nodes.get(i);
-            }
-        }
-        return resultado;
-    }
-
-    public LinkedList<Node> getNodes() {
-    		return this.nodes;
-    }
-
-    //en bfs no es necesario
     public int getWeight(LinkedList<Node> path) {
 
         int resultado = 0;
