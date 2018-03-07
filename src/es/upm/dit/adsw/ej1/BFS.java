@@ -1,67 +1,72 @@
-/*
-@author Javier Sanchez Fernandez
-@version 11-2-2018
- */
-package es.upm.dit.adsw.ej1;
+package es.upm.dit.adsw.ej2;
 
+/*
+@author Javier Sánchez Fernández
+@version 7-3-2017
+codigo modificado de https://stackoverflow.com
+ */
+//REVISAR 'getUnvisitedChild'.
 import java.util.*;
 
 public class BFS {
 
     private Graph graph;
-    private LinkedList<Node> queue = new LinkedList<>();
-    private LinkedList<Node> visited = new LinkedList<>();
-    private LinkedList<Node> adjacent = new LinkedList<>();
 
-    public BFS(Graph graph) {
-        this.graph = graph;
+    public BFS(Graph graph){
+        this.graph= graph;
     }
 
-    //para comprobar la adyacencia
-    public boolean isAdj(Node src, Node dst) {
+    public List<Node> search(Node src, Node dst){
 
-        LinkedList<Link> nodeLinks = this.graph.getLinks(src);
-        for (int i = 0; i < nodeLinks.size(); i++) {
-            if (nodeLinks.get(i).getSrc().equals(src) &&
-                    nodeLinks.get(i).getDst().equals(dst)) {
-                return true;
+        Queue<Node> queue= new LinkedList<>();
+        Set<Node> visited= new HashSet<>();
+        Map<Node, Node> predecessors= new HashMap<>();
+        List<Node> shortestPath= new ArrayList<>();
+        boolean found= false;
+        queue.add(src);
+
+        while(!queue.isEmpty()){
+            Node nextNode= queue.peek();
+            found= nextNode.getName().equals(dst.getName());
+
+            if(found){
+                break;
+            }
+            visited.add(nextNode);
+            Node child= this.getUnvisitedChild(nextNode, visited);  //fallo
+            if(child== null){
+                queue.poll();
+            }else{
+                queue.add(child);
+                visited.add(child);
+                predecessors.put(child, nextNode);
+                found= child.getName().equals(dst.getName());
+                if(found){
+                    break;
+                }
+
             }
         }
-        return false;
-    }
-
-    public boolean isVisited(Node node) {
-        if (this.visited.contains(node)) {
-            return true;
-        }
-        return false;
-    }
-
-    public List<Node> serach(Node src, Node dst) {
-
-        List<Node> result = new LinkedList<>();
-        this.queue.addFirst(src);                            //añado a la cola el nodo origen
-        result.add(queue.getFirst());                       //añado al resultado el nodo origen
-        this.visited.add(src);                               //añado a la lista de visitados el nodo origen
-
-        int aux = -1;                                   //variable auxiliar que voy a usar en el while
-
-        while (!this.queue.isEmpty()) {                      //is the queue empty? if dont --> go ahead
-            aux += 1;
-
-            Node dnode = queue.pollFirst();             //dequeue the first element from de queue
-
-            if (!this.isVisited(this.graph.getNodes().get(aux)) && this.isAdj(dnode, this.graph.getNodes().get(aux))) {
-                this.queue.addFirst(this.graph.getNodes().get(aux));
-                this.visited.add(this.graph.getNodes().get(aux));
-                result.add(this.graph.getNodes().get(aux));
+        if(found){
+            Node node= dst;
+            while(node!=null){
+                shortestPath.add(node);
+                node= predecessors.get(node);
             }
-
+            Collections.reverse(shortestPath);
         }
+        return shortestPath;
+    }
 
-        return result;
-
+    private Node getUnvisitedChild(Node node, Set<Node> visited){
+        List<Link> chilLinks= this.graph.getLinks(node);
+        for(Link link: chilLinks){
+            Node child= this.graph.getNode(link.getDst());
+            if(child!=null && !visited.contains(child)){
+                return child;
+            }
+        }
+        return null;
     }
 
 }
-

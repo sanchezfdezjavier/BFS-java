@@ -1,13 +1,6 @@
-
-package es.upm.dit.adsw.ej1;
+package es.upm.dit.adsw.ej2;
 
 import java.lang.*;
-
-/*
-@author Javier Sanchez Fernandez
-@version 11-2-2018
- */
-
 
 public class Link {
 
@@ -18,11 +11,11 @@ public class Link {
     public Link(String src, String dst, int weight) throws IllegalArgumentException {
         if (src.equals(null) || src.equals("") || dst.equals(null) || dst.equals("") || weight <= 0) {
             throw new IllegalArgumentException();
-        } else {
-            this.src = src;
-            this.dst = dst;
-            this.weight = weight;
         }
+        this.src = src;
+        this.dst = dst;
+        this.weight = weight;
+
     }
 
     public String getSrc() {
@@ -41,4 +34,5 @@ public class Link {
     public String toString() {
         return "Link [src=" + src + ", dst=" + dst + ", weight=" + weight + "]";
     }
+
 }
