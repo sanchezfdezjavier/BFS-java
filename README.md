@@ -1,2 +1,4 @@
 # ADSW_BFS
-Práctica1 ADSW
+University assignment
+
+Own Breadth First Search implementation
