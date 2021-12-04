@@ -1,4 +1,3 @@
 # ADSW_BFS
-University assignment
 
-Own Breadth First Search implementation
+My own **BFS(Breadth First Search)** implementation in Java.
